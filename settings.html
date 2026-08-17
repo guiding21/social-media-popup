@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Popup Ayarları</title>
+  <link rel="stylesheet" href="online-settings.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0e0f12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #settingsPanel {
+      position: static !important;
+      display: flex !important;
+      inset: auto !important;
+      background: transparent !important;
+      width: 100%;
+      min-height: 100vh;
+    }
+    #settingsBox {
+      margin: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="settingsPanel">
+    <div id="settingsBox">
+      <h2>Social Popup Ayarları</h2>
+      <div class="hint">Bu sayfadaki ayarlar sadece bu tarayıcı/Moblin ortamında saklanır.</div>
+      <form id="settingsForm">
+  <div class="sp-grid">
+    <div class="sp-field"><label>Instagram</label><div class="sp-social-row"><input name="instagram" placeholder="kullaniciadi"><label class="sp-toggle"><input type="checkbox" name="enableInstagram"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>YouTube</label><div class="sp-social-row"><input name="youtube" placeholder="kanal"><label class="sp-toggle"><input type="checkbox" name="enableYoutube"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>Twitch</label><div class="sp-social-row"><input name="twitch" placeholder="kanal"><label class="sp-toggle"><input type="checkbox" name="enableTwitch"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>Kick</label><div class="sp-social-row"><input name="kick" placeholder="kanal"><label class="sp-toggle"><input type="checkbox" name="enableKick"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>TikTok</label><div class="sp-social-row"><input name="tiktok" placeholder="kullaniciadi"><label class="sp-toggle"><input type="checkbox" name="enableTiktok"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>X / Twitter</label><div class="sp-social-row"><input name="x" placeholder="kullaniciadi"><label class="sp-toggle"><input type="checkbox" name="enableTwitter"><span>Açık</span></label></div></div>
+    <div class="sp-field"><label>Boyut (scale)</label><input name="scale" type="number" step="0.05" min="0.2" max="3"></div>
+    <div class="sp-field"><label>Animasyon hızı</label><input name="speed" type="number" step="0.05" min="0.05" max="10"></div>
+    <div class="sp-field"><label>Gösterim süresi (sn)</label><input name="duration" type="number" step="0.5" min="0.5" max="60"></div>
+    <div class="sp-field"><label>Yatay offset (px)</label><input name="offsetX" type="number" step="1"></div>
+    <div class="sp-field"><label>Dikey offset (px)</label><input name="offsetY" type="number" step="1"></div>
+    <div class="sp-field full"><label>Özel CSS (isteğe bağlı)</label><textarea name="customCSS" placeholder="Örn: body { ... }"></textarea></div>
+  </div>
+  <div class="sp-actions">
+    <button type="submit">Kaydet</button>
+    <button id="settingsReset" class="secondary" type="button">Sıfırla</button>
+  </div>
+  <div id="settingsStatus"></div>
+</form>
+    </div>
+  </div>
+  <script src="script.js"></script>
+  <script src="online-settings.js"></script>
+</body>
+</html>
