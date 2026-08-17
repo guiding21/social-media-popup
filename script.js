@@ -86,12 +86,19 @@ window.SocialPopupEngine = {
   restart: startPopupLoop
 };
 
-$(function() {
-  if (window.SocialPopupOnline && window.SocialPopupOnline.loadForCurrentUser) {
-    window.SocialPopupOnline.loadForCurrentUser().finally(function() {
+(function() {
+  function bootPopup() {
+    if (window.SocialPopupOnline && window.SocialPopupOnline.loadForCurrentUser) {
+      window.SocialPopupOnline.loadForCurrentUser()
+        .catch(function(err) { console.error("Online ayarlar yüklenemedi:", err); })
+        .finally(function() { startPopupLoop(); });
+    } else {
       startPopupLoop();
-    });
-  } else {
-    startPopupLoop();
+    }
   }
-});
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootPopup);
+  } else {
+    bootPopup();
+  }
+})();
