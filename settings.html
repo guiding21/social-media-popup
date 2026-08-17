@@ -40,7 +40,7 @@
       <div class="hint">Bu sayfadaki ayarlar sadece bu tarayıcı/Moblin ortamında saklanır.</div>
       <div class="sp-user-choice">
   <label for="popupUsername">Kullanıcı adın / kodun</label>
-  <input id="popupUsername" name="popupUsername" placeholder="ör. basar" maxlength="40" pattern="[A-Za-z0-9_-]+">
+  <input id="popupUsername" name="popupUsername" placeholder="ör. basar" maxlength="40" pattern="[A-Za-z0-9_\-]+">
   <small>Sadece harf, rakam, alt çizgi (_) ve tire (-) kullan. Benzersiz bir kod seç.</small>
   <div id="popupUserLink" class="sp-user-link"></div>
 </div>
@@ -67,6 +67,7 @@
 </form>
     </div>
   </div>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
   <script src="online-settings.js"></script>
