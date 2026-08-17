@@ -5,22 +5,22 @@ var settings = {
     
   
     // Instagram Name
-    instagramUsername: "x",
+    instagramUsername: "isim-gir",
 
     // Twitter Name
-    twitterUsername: "xx",
+    twitterUsername: "isim-gir",
     
     // Youtube Name
-    youtubeUsername: "x",
+    youtubeUsername: "isim-gir",
 
     // Kick Name
-    kickUsername: "x",
+    kickUsername: "isim-gir",
 
     // Tiktok Name
-    tiktokUsername: "x",
+    tiktokUsername: "isim-gir",
 
     // Twitch Name
-    twitchUsername: "x",
+    twitchUsername: "isim-gir",
     
        
   },
