@@ -17,10 +17,10 @@ var settings = {
     kickUsername: "Guiding",
 
     // Tiktok Name
-    tiktokUsername: "isim-gir",
+    tiktokUsername: "basarerenkaratas",
 
     // Twitch Name
-    twitchUsername: "basarerenkaratas",
+    twitchUsername: "xx",
     
        
   },
