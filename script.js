@@ -4,6 +4,7 @@ var settings = {
   social: {
     
   
+  
     // Instagram Name
     instagramUsername: "basarerenkaratas",
 
@@ -21,8 +22,7 @@ var settings = {
 
     // Twitch Name
     twitchUsername: "xx",
-    
-       
+      
   },
 
   // Gaming Popup Options
@@ -47,7 +47,7 @@ var settings = {
     enableTwitch: 0,
       
     // Enable Tiktok
-    enableTiktok: 1,
+    enableTiktok: 0,
     
     //
     // Times to update
@@ -71,6 +71,42 @@ var settings = {
 //
 //
 // No need to go any further!
+
+// Apply per-device online settings before the popup list is created.
+(function () {
+  try {
+    var saved = JSON.parse(localStorage.getItem("socialPopupSettingsV2") || "null");
+    if (!saved || typeof saved !== "object") return;
+
+    var names = {
+      instagram: "instagramUsername",
+      youtube: "youtubeUsername",
+      twitch: "twitchUsername",
+      kick: "kickUsername",
+      tiktok: "tiktokUsername",
+      x: "twitterUsername"
+    };
+    Object.keys(names).forEach(function (key) {
+      if (typeof saved[key] !== "undefined") {
+        settings.social[names[key]] = saved[key];
+      }
+    });
+
+    var enabled = [
+      "enableInstagram", "enableYoutube", "enableTwitch",
+      "enableKick", "enableTiktok", "enableTwitter"
+    ];
+    enabled.forEach(function (key) {
+      if (typeof saved[key] !== "undefined") {
+        settings.popup[key] = saved[key] ? 1 : 0;
+      }
+    });
+
+    if (typeof saved.duration !== "undefined" && !isNaN(Number(saved.duration))) {
+      settings.popup.aTime = Number(saved.duration);
+    }
+  } catch (e) {}
+})();
 
 // Load Social Network Names
 $( ".popup .right span" ).each(function() {
