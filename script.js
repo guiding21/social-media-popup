@@ -17,7 +17,7 @@ var settings = {
     kickUsername: "Guiding",
 
     // Tiktok Name
-    tiktokUsername: "basarerenkaratas",
+    tiktokUsername: "basarernkaratas",
 
     // Twitch Name
     twitchUsername: "xx",
