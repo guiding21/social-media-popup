@@ -3,7 +3,7 @@ const SUPABASE_KEY = "sb_publishable_X4bCqg7lk6mYkjvSRhMPjA_7lKWagE6";
 const SETTINGS_KEY = "socialPopupOnlineSettingsV1";
 
 function normalizeUserCode(value) {
-  return (value || "").trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 40);
+  return (value || "").trim().toLowerCase().replace(/[^a-z0-9_\-]/g, "").slice(0, 40);
 }
 function getUserCode() {
   const fromUrl = normalizeUserCode(new URLSearchParams(location.search).get("u"));
