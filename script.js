@@ -4,7 +4,6 @@ var settings = {
   social: {
     
   
-  
     // Instagram Name
     instagramUsername: "basarerenkaratas",
 
@@ -12,17 +11,18 @@ var settings = {
     twitterUsername: "basarernkaratas",
     
     // Youtube Name
-    youtubeUsername: "GuidingVL",
+    youtubeUsername: "Guidingvl",
 
     // Kick Name
     kickUsername: "Guiding",
 
     // Tiktok Name
-    tiktokUsername: "basarernkaratas",
+    tiktokUsername: "basarernkaratas,
 
     // Twitch Name
-    twitchUsername: "xx",
-      
+    twitchUsername: "isim-gir",
+    
+       
   },
 
   // Gaming Popup Options
