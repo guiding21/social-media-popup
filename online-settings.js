@@ -1,8 +1,8 @@
 (function () {
   const KEY = "socialPopupSettingsV2";
 
-  function scriptDefaults() {
-    const s = window.settings || {};
+  function getDefaults() {
+    const s = window.SocialPopupEngine?.settings || {};
     const social = s.social || {};
     const popup = s.popup || {};
     return {
@@ -28,16 +28,19 @@
   }
 
   function load() {
-    const defaults = scriptDefaults();
+    const defaults = getDefaults();
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "null");
       return saved && typeof saved === "object" ? {...defaults, ...saved} : defaults;
-    } catch (_) { return defaults; }
+    } catch (_) {
+      return defaults;
+    }
   }
 
   function fill(form, values) {
+    if (!form) return;
     Object.keys(values).forEach(k => {
-      const el = form?.elements?.namedItem(k);
+      const el = form.elements.namedItem(k);
       if (!el) return;
       if (el.type === "checkbox") el.checked = !!values[k];
       else el.value = values[k];
@@ -45,9 +48,10 @@
   }
 
   function read(form) {
-    const out = {...load()};
+    const current = load();
+    const out = {...current};
     Object.keys(out).forEach(k => {
-      const el = form?.elements?.namedItem(k);
+      const el = form.elements.namedItem(k);
       if (!el) return;
       if (el.type === "checkbox") out[k] = el.checked;
       else out[k] = ["scale","speed","duration","offsetX","offsetY"].includes(k)
@@ -56,14 +60,15 @@
     return out;
   }
 
-  function updateNetworkHint(values) {
-    if (!networkHint) return;
-    const enabled = ["enableInstagram","enableYoutube","enableTwitch","enableKick","enableTiktok","enableTwitter"]
-      .filter(k => values[k]).length;
-    networkHint.textContent = enabled ? (enabled + " sosyal medya açık.") : "⚠ Hiçbir sosyal medya açık değil.";
+  function apply(values) {
+    localStorage.setItem(KEY, JSON.stringify(values));
+    if (window.SocialPopupEngine) {
+      window.SocialPopupEngine.applySavedSettings();
+      window.SocialPopupEngine.restart();
+    }
   }
 
-window.SocialPopupSettings = {load, scriptDefaults};
+  window.SocialPopupSettings = {load, getDefaults, apply};
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("settingsForm");
@@ -72,36 +77,39 @@ window.SocialPopupSettings = {load, scriptDefaults};
     const closeBtn = document.getElementById("settingsClose");
     const resetBtn = document.getElementById("settingsReset");
     const status = document.getElementById("settingsStatus");
-    const networkHint = document.getElementById("settingsNetworkHint");
 
+    const hasSaved = !!localStorage.getItem(KEY);
     fill(form, load());
-    updateNetworkHint(load());
+    if (!hasSaved) setTimeout(() => panel.classList.add("show"), 150);
 
-    openBtn?.addEventListener("click", () => {
-      const current = load();
-      fill(form, current);
-      updateNetworkHint(current);
-      panel?.classList.add("show");
+    openBtn.addEventListener("click", () => {
+      fill(form, load());
+      panel.classList.add("show");
     });
 
-    closeBtn?.addEventListener("click", () => panel?.classList.remove("show"));
-    panel?.addEventListener("click", e => {
+    closeBtn.addEventListener("click", () => panel.classList.remove("show"));
+    panel.addEventListener("click", e => {
       if (e.target === panel) panel.classList.remove("show");
     });
 
-    form?.addEventListener("submit", e => {
+    form.addEventListener("submit", e => {
       e.preventDefault();
-      const next = read(form);
-      localStorage.setItem(KEY, JSON.stringify(next));
-      updateNetworkHint(next);
+      const values = read(form);
+      apply(values);
       status.textContent = "Kaydedildi ✓";
-      setTimeout(() => location.reload(), 250);
+      setTimeout(() => status.textContent = "", 1800);
     });
 
-    resetBtn?.addEventListener("click", () => {
+    resetBtn.addEventListener("click", () => {
       localStorage.removeItem(KEY);
-      status.textContent = "Varsayılanlara döndü ✓";
-      setTimeout(() => location.reload(), 250);
+      const defaults = getDefaults();
+      fill(form, defaults);
+      if (window.SocialPopupEngine) {
+        window.SocialPopupEngine.applySavedSettings();
+        window.SocialPopupEngine.restart();
+      }
+      status.textContent = "GitHub'daki varsayılanlara döndü ✓";
+      setTimeout(() => status.textContent = "", 2200);
     });
   });
 })();
