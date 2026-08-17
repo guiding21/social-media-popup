@@ -13,3 +13,14 @@ Bu sürüm mevcut popup dosyalarını korur ve tarayıcı üzerinden açılan bi
 localStorage ayarları URL'ye göre ve cihaz/tarayıcıya göre tutulur. Yani Moblin'de yaptığın ayarlar bilgisayardaki Chrome'dan ayrı olabilir.
 
 Orijinal dosyalar `original/` klasöründe korunmuştur.
+
+
+## URL kullanımı
+
+Yayın için:
+https://guiding21.github.io/social-media-popup/
+
+Ayarlar için:
+https://guiding21.github.io/social-media-popup/settings.html
+
+Yayın URL'sini OBS/Moblin'e eklediğinde ayar paneli görünmez. Ayarları değiştirmek için settings.html adresini aç.
