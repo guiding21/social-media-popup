@@ -1,61 +1,94 @@
+(function () {
+  const KEY = "socialPopupSettingsV2";
 
-:root {
-  --sp-scale: 1;
-  --sp-speed: 1s;
-  --sp-offset-x: 0px;
-  --sp-offset-y: 0px;
-}
-#settingsOpen {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 999999;
-  border: 0;
-  border-radius: 12px;
-  padding: 9px 13px;
-  font: 600 13px Arial, sans-serif;
-  background: rgba(20,20,24,.92);
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 5px 25px rgba(0,0,0,.35);
-}
-#settingsPanel {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:1000000;
-  background:rgba(0,0,0,.58);
-  align-items:center;
-  justify-content:center;
-  font-family:Arial,sans-serif;
-}
-#settingsPanel.show { display:flex; }
-#settingsBox {
-  width:min(460px,92vw);
-  max-height:90vh;
-  overflow:auto;
-  background:#17171b;
-  color:#fff;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 20px 70px rgba(0,0,0,.55);
-}
-#settingsBox h2 { margin:0 0 4px; font-size:20px; }
-#settingsBox .hint { color:#aaa; font-size:12px; margin-bottom:16px; }
-.sp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.sp-field { display:flex; flex-direction:column; gap:5px; }
-.sp-field.full { grid-column:1/-1; }
-.sp-field label { font-size:11px; color:#bbb; }
-.sp-field input, .sp-field textarea {
-  box-sizing:border-box; width:100%; border:1px solid #33343b;
-  border-radius:9px; background:#0f1013; color:#fff; padding:9px;
-  outline:none;
-}
-.sp-field textarea { min-height:90px; resize:vertical; }
-.sp-actions { display:flex; gap:8px; margin-top:15px; }
-.sp-actions button {
-  flex:1; border:0; border-radius:10px; padding:10px; cursor:pointer;
-  background:#fff; color:#111; font-weight:700;
-}
-.sp-actions button.secondary { background:#2a2b31; color:#fff; }
-#settingsStatus { min-height:16px; margin-top:8px; color:#8ee28e; font-size:12px; }
+  function scriptDefaults() {
+    const s = window.settings || {};
+    const social = s.social || {};
+    const popup = s.popup || {};
+    return {
+      instagram: social.instagramUsername || "",
+      youtube: social.youtubeUsername || "",
+      twitch: social.twitchUsername || "",
+      kick: social.kickUsername || "",
+      tiktok: social.tiktokUsername || "",
+      x: social.twitterUsername || "",
+      enableInstagram: Number(popup.enableInstagram) === 1,
+      enableYoutube: Number(popup.enableYoutube) === 1,
+      enableTwitch: Number(popup.enableTwitch) === 1,
+      enableKick: Number(popup.enableKick) === 1,
+      enableTiktok: Number(popup.enableTiktok) === 1,
+      enableTwitter: Number(popup.enableTwitter) === 1,
+      scale: 1,
+      speed: Number(popup.aTime) || 3,
+      duration: Number(popup.aTime) || 3,
+      offsetX: 0,
+      offsetY: 0,
+      customCSS: ""
+    };
+  }
+
+  function load() {
+    const defaults = scriptDefaults();
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+      return saved && typeof saved === "object" ? {...defaults, ...saved} : defaults;
+    } catch (_) { return defaults; }
+  }
+
+  function fill(form, values) {
+    Object.keys(values).forEach(k => {
+      const el = form?.elements?.namedItem(k);
+      if (!el) return;
+      if (el.type === "checkbox") el.checked = !!values[k];
+      else el.value = values[k];
+    });
+  }
+
+  function read(form) {
+    const out = {...load()};
+    Object.keys(out).forEach(k => {
+      const el = form?.elements?.namedItem(k);
+      if (!el) return;
+      if (el.type === "checkbox") out[k] = el.checked;
+      else out[k] = ["scale","speed","duration","offsetX","offsetY"].includes(k)
+        ? Number(el.value) : el.value;
+    });
+    return out;
+  }
+
+  window.SocialPopupSettings = {load, scriptDefaults};
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("settingsForm");
+    const panel = document.getElementById("settingsPanel");
+    const openBtn = document.getElementById("settingsOpen");
+    const closeBtn = document.getElementById("settingsClose");
+    const resetBtn = document.getElementById("settingsReset");
+    const status = document.getElementById("settingsStatus");
+
+    fill(form, load());
+
+    openBtn?.addEventListener("click", () => {
+      fill(form, load());
+      panel?.classList.add("show");
+    });
+
+    closeBtn?.addEventListener("click", () => panel?.classList.remove("show"));
+    panel?.addEventListener("click", e => {
+      if (e.target === panel) panel.classList.remove("show");
+    });
+
+    form?.addEventListener("submit", e => {
+      e.preventDefault();
+      localStorage.setItem(KEY, JSON.stringify(read(form)));
+      status.textContent = "Kaydedildi ✓";
+      setTimeout(() => location.reload(), 250);
+    });
+
+    resetBtn?.addEventListener("click", () => {
+      localStorage.removeItem(KEY);
+      status.textContent = "Varsayılanlara döndü ✓";
+      setTimeout(() => location.reload(), 250);
+    });
+  });
+})();
