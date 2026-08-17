@@ -1,79 +1,29 @@
 var settings = {
-
-  // Simply change the name in quotes with your name
   social: {
-    
-  
-    // Instagram Name
     instagramUsername: "isim-gir",
-
-    // Twitter Name
     twitterUsername: "isim-gir",
-    
-    // Youtube Name
     youtubeUsername: "isim-gir",
-
-    // Kick Name
     kickUsername: "isim-gir",
-
-    // Tiktok Name
     tiktokUsername: "isim-gir",
-
-    // Twitch Name
-    twitchUsername: "isim-gir",
-    
-       
+    twitchUsername: "isim-gir"
   },
-
-  // Gaming Popup Options
   popup: {
-    
-    // This is where you enable or disable networks
-    // 1 means enabled, 0 means disabled
-    
-    // Enable Twitter
     enableTwitter: 1,
-    
-    // Enable Instagram
     enableInstagram: 1,
-    
-    // Enable YouTube
     enableYoutube: 1,
-    
-    // Enable Kick
     enableKick: 1,
-    
-    // Enable Twitch
     enableTwitch: 0,
-      
-    // Enable Tiktok
-    enableTiktok: 0,
-    
-    //
-    // Times to update
-    //
-    
-    // Time each network animation takes in seconds
+    enableTiktok: 1,
     aTime: 3,
-    
-    // The delay for the animation cycle to restart in seconds
     pauseTime: 0
   }
 };
 
-// You're all done
-//
-//
-//
-//
-//
-//
-//
-//
-// No need to go any further!
+var popupTimer = null;
+var popupList = [];
+var popupIndex = 0;
 
-// Apply per-device online settings before the popup list is created.
-(function () {
+function applySavedSettings() {
   try {
     var saved = JSON.parse(localStorage.getItem("socialPopupSettingsV2") || "null");
     if (!saved || typeof saved !== "object") return;
@@ -86,6 +36,7 @@ var settings = {
       tiktok: "tiktokUsername",
       x: "twitterUsername"
     };
+
     Object.keys(names).forEach(function (key) {
       if (typeof saved[key] !== "undefined") {
         settings.social[names[key]] = saved[key];
@@ -93,9 +44,14 @@ var settings = {
     });
 
     var enabled = [
-      "enableInstagram", "enableYoutube", "enableTwitch",
-      "enableKick", "enableTiktok", "enableTwitter"
+      "enableInstagram",
+      "enableYoutube",
+      "enableTwitch",
+      "enableKick",
+      "enableTiktok",
+      "enableTwitter"
     ];
+
     enabled.forEach(function (key) {
       if (typeof saved[key] !== "undefined") {
         settings.popup[key] = saved[key] ? 1 : 0;
@@ -106,62 +62,75 @@ var settings = {
       settings.popup.aTime = Number(saved.duration);
     }
   } catch (e) {}
-})();
-
-// Load Social Network Names
-$( ".popup .right span" ).each(function() {
-    var socialName = settings.social[$(this).data('name')];
-    $(this).append( socialName );
-});
-
-// Load Social Popup
-$(".popup").each(function() {
-  var supporterEnable = settings.popup[$(this).data('box')],
-    boxName = $(this).data('box');
-
-  if (supporterEnable == 1) {
-    $('input[name=' + boxName + ']').prop('checked', true);
-    $(this).addClass("animate-popup");
-  } else if (supporterEnable === 0) {
-    $('input[name=' + boxName + ']').prop('checked', false);
-    $(this).addClass("no-popup");
-  } else {
-    $(this).addClass("no-popup");;
-  }
-});
-
-// Animate Popup
-// Robust timer-based loop: works with 1 or many enabled social networks.
-var popups = $('.animate-popup');
-var i = 0;
-var pT = Number(settings.popup.pauseTime || 0) * 1000;
-var animationTimer = null;
-
-function animatePopup() {
-  if (!popups.length) {
-    // If all networks are disabled, there is simply nothing to animate.
-    return;
-  }
-
-  popups.removeClass("show-popup");
-
-  var current = popups.eq(i);
-  current.addClass("show-popup");
-
-  var duration = Math.max(100, Number(settings.popup.aTime || 3) * 1000);
-
-  clearTimeout(animationTimer);
-  animationTimer = setTimeout(function () {
-    current.removeClass("show-popup");
-    i++;
-
-    if (i >= popups.length) {
-      i = 0;
-      animationTimer = setTimeout(animatePopup, pT);
-    } else {
-      animatePopup();
-    }
-  }, duration);
 }
 
-animatePopup();
+function stopPopupLoop() {
+  if (popupTimer) {
+    clearTimeout(popupTimer);
+    popupTimer = null;
+  }
+  $(".popup").removeClass("show-popup animate-popup").addClass("no-popup");
+}
+
+function preparePopupList() {
+  popupList = [];
+
+  $(".popup").each(function () {
+    var boxName = $(this).data("box");
+    var enabled = settings.popup[boxName];
+
+    var socialName = settings.social[$(this).find("span[data-name]").data("name")];
+    $(this).find("span[data-name]").text(socialName || "");
+
+    if (enabled == 1 && socialName) {
+      $(this).removeClass("no-popup").addClass("animate-popup");
+      popupList.push(this);
+    } else {
+      $(this).removeClass("animate-popup show-popup").addClass("no-popup");
+    }
+  });
+}
+
+function startPopupLoop() {
+  stopPopupLoop();
+  preparePopupList();
+  popupIndex = 0;
+
+  if (!popupList.length) return;
+
+  function showNext() {
+    $(".popup").removeClass("show-popup");
+    var current = $(popupList[popupIndex]);
+    current.removeClass("no-popup").addClass("show-popup");
+
+    var duration = Math.max(0.2, Number(settings.popup.aTime) || 3) * 1000;
+
+    popupTimer = setTimeout(function () {
+      current.removeClass("show-popup");
+      popupIndex = (popupIndex + 1) % popupList.length;
+
+      var pause = Math.max(0, Number(settings.popup.pauseTime) || 0) * 1000;
+      popupTimer = setTimeout(showNext, pause);
+    }, duration);
+  }
+
+  showNext();
+}
+
+window.SocialPopupEngine = {
+  settings: settings,
+  applySavedSettings: applySavedSettings,
+  start: startPopupLoop,
+  restart: startPopupLoop,
+  stop: stopPopupLoop
+};
+
+// The settings panel loads after this file and starts the popup once its
+// per-device settings are available.
+applySavedSettings();
+
+$(function () {
+  if (window.SocialPopupEngine) {
+    window.SocialPopupEngine.start();
+  }
+});
