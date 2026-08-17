@@ -47,7 +47,7 @@ var settings = {
     enableTwitch: 0,
       
     // Enable Tiktok
-    enableTiktok: 0,
+    enableTiktok: 1,
     
     //
     // Times to update
