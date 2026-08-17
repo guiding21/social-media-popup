@@ -6,6 +6,12 @@
   <title>Social Popup Ayarları</title>
   <link rel="stylesheet" href="online-settings.css">
   <style>
+    .sp-user-choice{margin:0 0 18px}
+    .sp-user-choice label{display:block;margin-bottom:6px;font-weight:600}
+    .sp-user-choice input{width:100%;box-sizing:border-box;padding:10px}
+    .sp-user-choice small{display:block;color:#999;margin-top:5px}
+    .sp-user-link{margin-top:10px;word-break:break-all;color:#ddd}
+    .sp-user-link code{background:#181a20;padding:4px 6px;border-radius:4px}
     body {
       margin: 0;
       min-height: 100vh;
@@ -32,7 +38,13 @@
     <div id="settingsBox">
       <h2>Social Popup Ayarları</h2>
       <div class="hint">Bu sayfadaki ayarlar sadece bu tarayıcı/Moblin ortamında saklanır.</div>
-      <form id="settingsForm">
+      <div class="sp-user-choice">
+  <label for="popupUsername">Kullanıcı adın / kodun</label>
+  <input id="popupUsername" name="popupUsername" placeholder="ör. basar" maxlength="40" pattern="[A-Za-z0-9_-]+">
+  <small>Sadece harf, rakam, alt çizgi (_) ve tire (-) kullan. Benzersiz bir kod seç.</small>
+  <div id="popupUserLink" class="sp-user-link"></div>
+</div>
+<form id="settingsForm">
   <div class="sp-grid">
     <div class="sp-field"><label>Instagram</label><div class="sp-social-row"><input name="instagram" placeholder="kullaniciadi"><label class="sp-toggle"><input type="checkbox" name="enableInstagram"><span>Açık</span></label></div></div>
     <div class="sp-field"><label>YouTube</label><div class="sp-social-row"><input name="youtube" placeholder="kanal"><label class="sp-toggle"><input type="checkbox" name="enableYoutube"><span>Açık</span></label></div></div>
