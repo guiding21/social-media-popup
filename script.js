@@ -5,22 +5,22 @@ var settings = {
     
   
     // Instagram Name
-    instagramUsername: "berkechat",
+    instagramUsername: "basarerenkaratas",
 
     // Twitter Name
-    twitterUsername: "berkechat",
+    twitterUsername: "basarernkaratas",
     
     // Youtube Name
-    youtubeUsername: "Gatvius",
+    youtubeUsername: "GuidingVL",
 
     // Kick Name
-    kickUsername: "Gatvius",
+    kickUsername: "Guiding",
 
     // Tiktok Name
     tiktokUsername: "isim-gir",
 
     // Twitch Name
-    twitchUsername: "isim-gir",
+    twitchUsername: "basarerenkaratas",
     
        
   },
