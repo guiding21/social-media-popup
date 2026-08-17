@@ -84,7 +84,7 @@
       status.textContent = "Kaydedildi ✓";
       setTimeout(() => location.reload(), 250);
     });
-
+    
     resetBtn?.addEventListener("click", () => {
       localStorage.removeItem(KEY);
       status.textContent = "Varsayılanlara döndü ✓";
