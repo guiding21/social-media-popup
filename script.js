@@ -5,22 +5,22 @@ var settings = {
     
   
     // Instagram Name
-    instagramUsername: "basarerenkaratas",
+    instagramUsername: "x",
 
     // Twitter Name
-    twitterUsername: "basarernkaratas",
+    twitterUsername: "xx",
     
     // Youtube Name
-    youtubeUsername: "Guidingvl",
+    youtubeUsername: "x",
 
     // Kick Name
-    kickUsername: "Guiding",
+    kickUsername: "x",
 
     // Tiktok Name
-    tiktokUsername: "basarernkaratas,
+    tiktokUsername: "x",
 
     // Twitch Name
-    twitchUsername: "isim-gir",
+    twitchUsername: "x",
     
        
   },
@@ -131,26 +131,37 @@ $(".popup").each(function() {
 });
 
 // Animate Popup
-
+// Robust timer-based loop: works with 1 or many enabled social networks.
 var popups = $('.animate-popup');
 var i = 0;
-var pT = settings.popup.pauseTime * 1000;
+var pT = Number(settings.popup.pauseTime || 0) * 1000;
+var animationTimer = null;
 
 function animatePopup() {
-  if (i >= popups.length) {
-    i = 0;
+  if (!popups.length) {
+    // If all networks are disabled, there is simply nothing to animate.
+    return;
   }
-  popups.eq(i).addClass("show-popup")
-    .delay(settings.popup.aTime * 1000)
-    .queue(function() {
-      $(this).removeClass("show-popup");
-      $(this).dequeue();
-      if (i == popups.length) {
-        setTimeout(animatePopup, pT);
-      } else {
-        animatePopup();
-      }
-    });
-  i++;
+
+  popups.removeClass("show-popup");
+
+  var current = popups.eq(i);
+  current.addClass("show-popup");
+
+  var duration = Math.max(100, Number(settings.popup.aTime || 3) * 1000);
+
+  clearTimeout(animationTimer);
+  animationTimer = setTimeout(function () {
+    current.removeClass("show-popup");
+    i++;
+
+    if (i >= popups.length) {
+      i = 0;
+      animationTimer = setTimeout(animatePopup, pT);
+    } else {
+      animatePopup();
+    }
+  }, duration);
 }
+
 animatePopup();
