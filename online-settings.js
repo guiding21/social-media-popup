@@ -56,7 +56,14 @@
     return out;
   }
 
-  window.SocialPopupSettings = {load, scriptDefaults};
+  function updateNetworkHint(values) {
+    if (!networkHint) return;
+    const enabled = ["enableInstagram","enableYoutube","enableTwitch","enableKick","enableTiktok","enableTwitter"]
+      .filter(k => values[k]).length;
+    networkHint.textContent = enabled ? (enabled + " sosyal medya açık.") : "⚠ Hiçbir sosyal medya açık değil.";
+  }
+
+window.SocialPopupSettings = {load, scriptDefaults};
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("settingsForm");
@@ -65,11 +72,15 @@
     const closeBtn = document.getElementById("settingsClose");
     const resetBtn = document.getElementById("settingsReset");
     const status = document.getElementById("settingsStatus");
+    const networkHint = document.getElementById("settingsNetworkHint");
 
     fill(form, load());
+    updateNetworkHint(load());
 
     openBtn?.addEventListener("click", () => {
-      fill(form, load());
+      const current = load();
+      fill(form, current);
+      updateNetworkHint(current);
       panel?.classList.add("show");
     });
 
@@ -80,11 +91,13 @@
 
     form?.addEventListener("submit", e => {
       e.preventDefault();
-      localStorage.setItem(KEY, JSON.stringify(read(form)));
+      const next = read(form);
+      localStorage.setItem(KEY, JSON.stringify(next));
+      updateNetworkHint(next);
       status.textContent = "Kaydedildi ✓";
       setTimeout(() => location.reload(), 250);
     });
-    
+
     resetBtn?.addEventListener("click", () => {
       localStorage.removeItem(KEY);
       status.textContent = "Varsayılanlara döndü ✓";
