@@ -1,0 +1,68 @@
+
+:root {
+  --sp-scale: 1;
+  --sp-speed: 1s;
+  --sp-offset-x: 0px;
+  --sp-offset-y: 0px;
+}
+#settingsOpen {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 999999;
+  border: 0;
+  border-radius: 12px;
+  padding: 9px 13px;
+  font: 600 13px Arial, sans-serif;
+  background: rgba(20,20,24,.92);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 25px rgba(0,0,0,.35);
+}
+#settingsPanel {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000000;
+  background:rgba(0,0,0,.58);
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,sans-serif;
+}
+#settingsPanel.show { display:flex; }
+#settingsBox {
+  width:min(460px,92vw);
+  max-height:90vh;
+  overflow:auto;
+  background:#17171b;
+  color:#fff;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 20px 70px rgba(0,0,0,.55);
+}
+#settingsBox h2 { margin:0 0 4px; font-size:20px; }
+#settingsBox .hint { color:#aaa; font-size:12px; margin-bottom:16px; }
+.sp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sp-field { display:flex; flex-direction:column; gap:5px; }
+.sp-field.full { grid-column:1/-1; }
+.sp-field label { font-size:11px; color:#bbb; }
+.sp-field input, .sp-field textarea {
+  box-sizing:border-box; width:100%; border:1px solid #33343b;
+  border-radius:9px; background:#0f1013; color:#fff; padding:9px;
+  outline:none;
+}
+.sp-field textarea { min-height:90px; resize:vertical; }
+.sp-actions { display:flex; gap:8px; margin-top:15px; }
+.sp-actions button {
+  flex:1; border:0; border-radius:10px; padding:10px; cursor:pointer;
+  background:#fff; color:#111; font-weight:700;
+}
+.sp-actions button.secondary { background:#2a2b31; color:#fff; }
+#settingsStatus { min-height:16px; margin-top:8px; color:#8ee28e; font-size:12px; }
+
+.sp-social-row{display:flex;align-items:center;gap:8px}
+.sp-social-row input[name]{flex:1;min-width:0}
+.sp-toggle{display:flex!important;align-items:center;gap:4px;white-space:nowrap;color:#bbb!important;font-size:11px!important;cursor:pointer}
+.sp-toggle input[type="checkbox"]{width:auto!important;accent-color:#fff}
+#settingsOpen{pointer-events:auto!important;position:fixed!important;z-index:2147483647!important}
+#settingsPanel{z-index:2147483646!important}
