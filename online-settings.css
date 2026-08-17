@@ -64,4 +64,5 @@
 .sp-social-row input[name]{flex:1;min-width:0}
 .sp-toggle{display:flex!important;align-items:center;gap:4px;white-space:nowrap;color:#bbb!important;font-size:11px!important;cursor:pointer}
 .sp-toggle input[type="checkbox"]{width:auto!important;accent-color:#fff}
- 
+#settingsOpen{pointer-events:auto!important;position:fixed!important;z-index:2147483647!important}
+#settingsPanel{z-index:2147483646!important}
